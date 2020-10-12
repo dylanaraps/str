@@ -4,4 +4,3 @@ todo:
 
 - [ ] error handling
 - [ ] str_getline(str **, FILE *f);
-- [ ] func to convert <type> to <char *>.

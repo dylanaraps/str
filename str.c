@@ -22,7 +22,6 @@ void str_push_l(str **s, const char *d, size_t l) {
 
     memcpy(*s + str_get_len(*s), d, l + 1);
     str_set_len(s, str_get_len(*s) + l);
-    (*s)[str_get_len(*s)] = 0;
 }
 
 void str_push(str **s, const char *d) {
@@ -34,7 +33,6 @@ void str_push(str **s, const char *d) {
 void str_undo_l(str **s, size_t l) {
     if (l <= str_get_len(*s)) {
         str_set_len(s, str_get_len(*s) - l);
-        (*s)[str_get_len(*s)] = 0;
     }
 }
 
@@ -64,5 +62,6 @@ void str_set_cap(str **s, size_t l) {
 void str_set_len(str **s, size_t l) {
     if (*s) {
         ((size_t *)(*s))[-1] = l;
+        (*s)[str_get_len(*s)] = 0;
     }
 }
