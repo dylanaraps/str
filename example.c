@@ -36,6 +36,9 @@ int main (int argc, char *argv[]) {
     assert(str_get_len(name) == 0);
     assert(strcmp(name, "") == 0);
 
+    str_push(&name, "./example.c");
+    assert(strcmp(name, "./example.c") == 0);
+
     str_free(&name);
 
     return 0;
