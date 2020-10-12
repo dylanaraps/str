@@ -50,7 +50,9 @@ void str_zero(str **s) {
 }
 
 void str_free(str **s) {
-    free((size_t *) *s - 2);
+    if (*s) {
+        free((size_t *) *s - 2);
+    }
 }
 
 void str_set_cap(str **s, size_t l) {

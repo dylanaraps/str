@@ -1,6 +1,7 @@
 #ifndef KISS_STR_H_
 #define KISS_STR_H_
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
