@@ -11,6 +11,8 @@ int main (int argc, char *argv[]) {
     str *name = NULL;
 
     str_init(&name, 10);
+    assert(str_get_cap(name) == 10 + 1);
+
     str_push(&name, getenv("PWD"));
     assert(strcmp(name, getenv("PWD")) == 0);
 
@@ -29,6 +31,10 @@ int main (int argc, char *argv[]) {
 
     str_undo_l(&name, 1);
     assert(strcmp(name, getenv("PWD")) == 0);
+
+    str_zero(&name);
+    assert(str_get_len(name) == 0);
+    assert(strcmp(name, "") == 0);
 
     str_free(&name);
 
