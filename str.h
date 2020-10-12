@@ -14,9 +14,13 @@ void str_zero(str **);
 void str_free(str **);
 void str_set_cap(str **, size_t);
 void str_set_len(str **, size_t);
-size_t str_get_cap(const str *);
-size_t str_get_len(const str *);
 
 #define str_init(s, l) str_alloc(s, l)
+
+#define str_get_cap(s) \
+    ((s) ? ((size_t *)(s))[-2] : (size_t) 0)
+
+#define str_get_len(s) \
+    ((s) ? ((size_t *)(s))[-1] : (size_t) 0)
 
 #endif

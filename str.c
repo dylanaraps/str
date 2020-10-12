@@ -66,11 +66,3 @@ void str_set_len(str **s, size_t l) {
         ((size_t *)(*s))[-1] = l;
     }
 }
-
-size_t str_get_cap(const str *s) {
-    return s ? ((size_t *)(s))[-2] : (size_t) 0;
-}
-
-size_t str_get_len(const str *s) {
-    return s ? ((size_t *)(s))[-1] : (size_t) 0;
-}
