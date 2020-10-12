@@ -2,6 +2,7 @@
 #define KISS_STR_H_
 
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef char str;
 
@@ -24,17 +25,20 @@ void str_set_cap(str **, size_t);
 void str_set_len(str **, size_t);
 
 #define str_fmt(s, f, ...) do { \
-    int _str_l1 = snprintf(NULL, 0, f, __VA_ARGS__); \
-                                                     \
-    assert(_str_l1 > 0);                             \
-    str_alloc(s, (size_t) _str_l1);                  \
-                                                     \
-    int _str_l2 = snprintf(                          \
-        *s + str_get_len(*s), (size_t) _str_l1 + 1,  \
-        f, __VA_ARGS__);                             \
-                                                     \
-    assert(_str_l1 == _str_l2);                      \
-    str_set_len(s, (size_t) _str_l1);                \
+    int _str_l1 = snprintf(NULL, 0, f, __VA_ARGS__);             \
+                                                                 \
+    assert(_str_l1 > 0);                                         \
+                                                                 \
+    if (str_get_len(*s) + (size_t) _str_l1 >= str_get_cap(*s)) { \
+        str_alloc(s, (size_t) _str_l1);                          \
+    }                                                            \
+                                                                 \
+    int _str_l2 = snprintf(                                      \
+        *s + str_get_len(*s), (size_t) _str_l1 + 1,              \
+        f, __VA_ARGS__);                                         \
+                                                                 \
+    assert(_str_l1 == _str_l2);                                  \
+    str_set_len(s, str_get_len(*s) + (size_t) _str_l1);          \
 } while (0)
 
 #endif
