@@ -1,0 +1,16 @@
+name: CI
+on: [push, pull_request]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Run CI.
+              run: |
+                  sudo apt install valgrind tcc
+                  CFLAGS=-Werror CC=gcc   make -B
+                  make check
+                  CFLAGS=-Werror CC=clang make -B
+                  make check
+                  CFLAGS=-Werror CC=tcc   make -B
+                  make check
