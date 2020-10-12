@@ -15,15 +15,15 @@ typedef char str;
 
 #define str_init(s, l) str_alloc(s, l)
 
-void str_alloc(str **, size_t);
-void str_push_l(str **, const char *, size_t);
-void str_push(str **, const char *);
-void str_undo_l(str **, size_t);
-void str_undo(str **, const char *);
-void str_zero(str **);
-void str_free(str **);
-void str_set_cap(str **, size_t);
-void str_set_len(str **, size_t);
+void str_alloc(str **s, size_t l);
+void str_push_l(str **s, const char *d, size_t l);
+void str_push(str **s, const char *d);
+void str_undo_l(str **s, size_t l);
+void str_undo(str **s, const char *d);
+void str_zero(str **s);
+void str_free(str **s);
+void str_set_cap(str **s, size_t l);
+void str_set_len(str **s, size_t l);
 
 #define str_fmt(s, f, ...) do { \
     int _str_l1 = snprintf(NULL, 0, f, __VA_ARGS__);             \
