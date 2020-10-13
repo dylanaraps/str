@@ -108,6 +108,30 @@ int main (int argc, char *argv[]) {
         assert(strcmp(s2->buf, "hello, world") == 0);
         assert(s2->err == STR_OK);
 
+    FILE *f = fopen("./test.c", "r");
+    if (f) {
+        str_zero(&s2);
+        str_getline(&s2, f);
+        assert(strcmp(s2->buf, "#include <assert.h>") == 0);
+        assert(s2->len == 19);
+        assert(s2->cap == 39);
+        str_zero(&s2);
+        str_getline(&s2, f);
+        assert(strcmp(s2->buf, "#include <stdio.h>") == 0);
+        assert(s2->len == 18);
+        assert(s2->cap == 39);
+        str_zero(&s2);
+        str_getline(&s2, f);
+        assert(strcmp(s2->buf, "#include <stdlib.h>") == 0);
+        assert(s2->len == 19);
+        assert(s2->cap == 39);
+        fclose(f);
+    }
+
+    f = fopen("sdasldlasdjladjl", "r");
+    str_getline(&s2, f);
+    assert(s2->err == STR_EINVAL);
+
     str_free(s2);
 
     return EXIT_SUCCESS;

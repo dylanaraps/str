@@ -1,6 +1,7 @@
 #ifndef KISS_STR_H_
 #define KISS_STR_H_
 
+#include <stdio.h>
 #include <stdlib.h>
 
 typedef struct str {
@@ -25,6 +26,7 @@ void str_undo_l(str **s, size_t l);
 void str_undo(str **s, const char *d);
 void str_zero(str **s);
 str *str_dup(str **s);
+void str_getline(str **s, FILE *f);
 void str_free(str *s);
 
 #endif

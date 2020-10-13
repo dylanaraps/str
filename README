@@ -2,6 +2,5 @@ str
 
 todo:
 
-- [ ] str_getline(str **, FILE *f);
 - [ ] str_tok
 - [ ] etc

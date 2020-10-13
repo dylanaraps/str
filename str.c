@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -32,7 +33,7 @@ void str_alloc(str **s, size_t l) {
 
 void str_push_c(str **s, char d) {
     if ((*s)->len + 1 >= (*s)->cap) {
-        str_alloc(s, 1);
+        str_alloc(s, (*s)->cap * 2);
     }
 
     if ((*s)->err == STR_OK) {
@@ -90,6 +91,19 @@ void str_zero(str **s) {
     if ((*s)->err == STR_OK) {
         memset((*s)->buf, 0, (*s)->len);
         (*s)->len = 0;
+    }
+}
+
+void str_getline(str **s, FILE *f) {
+    if (f) {
+        int c;
+
+        while ((c = fgetc(f)) != '\n' && c != EOF) {
+            str_push_c(s, c);
+        }
+
+    } else {
+        (*s)->err = STR_EINVAL;
     }
 }
 
