@@ -33,7 +33,7 @@ example: $(OBJ)
 $(OBJ): $(HDR)
 
 check:
-	valgrind $(VALGRIND) ./example
+	valgrind $(VALGRIND) ./example 2>&1
 
 clean:
 	rm -f example $(OBJ)

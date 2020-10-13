@@ -1,6 +1,5 @@
-#include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "str.h"
 
@@ -8,41 +7,27 @@ int main (int argc, char *argv[]) {
     (void) argc;
     (void) argv;
 
-    str *name = NULL;
+    str *s = str_init(10);
 
-    str_init(&name, 10);
-    assert(str_get_cap(name) == 10 + 1);
+    if (!s) {
+        fputs("failed to allocate memory\n", stderr);
+        return EXIT_FAILURE;
+    }
 
-    str_push(&name, getenv("PWD"));
-    assert(strcmp(name, getenv("PWD")) == 0);
+    str_push(&s, getenv("PWD"));
 
-    str_push_l(&name, "/", 1);
-    assert(name[str_get_len(name) - 1] == '/');
+    if (s->buf[s->len - 1] != '/') {
+        str_push_c(&s, '/');
+    }
 
-    str_push(&name, "test");
-    assert(name[str_get_len(name) - 4] == 't');
-    assert(name[str_get_len(name) - 3] == 'e');
-    assert(name[str_get_len(name) - 2] == 's');
-    assert(name[str_get_len(name) - 1] == 't');
-    assert(name[str_get_len(name)] == 0);
+    str_push_l(&s, "test", 4);
 
-    str_undo(&name, "test");
-    assert(name[str_get_len(name) - 1] == '/');
+    if (s->err != STR_OK) {
+        str_free(s);
+        fputs("failed to construct string\n", stderr);
+        return EXIT_FAILURE;
+    }
 
-    str_undo_l(&name, 1);
-    assert(strcmp(name, getenv("PWD")) == 0);
-
-    str_zero(&name);
-    assert(str_get_len(name) == 0);
-    assert(strcmp(name, "") == 0);
-
-    str_push(&name, "./example");
-    assert(strcmp(name, "./example") == 0);
-
-    str_fmt(&name, " -> %d", 0);
-    assert(strcmp(name, "./example -> 0") == 0);
-
-    str_free(&name);
-
-    return 0;
+    str_free(s);
+    return EXIT_SUCCESS;
 }
