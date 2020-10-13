@@ -21,10 +21,10 @@ VALGRIND = \
 	--trace-children=yes \
 	--show-reachable=no \
 
-OBJ = example.o str.o
+OBJ = test.o str.o
 HDR = str.h
 
-example: $(OBJ)
+test: $(OBJ)
 	$(CC) $(BUILD_FLAGS) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
 .c.o:
@@ -33,9 +33,9 @@ example: $(OBJ)
 $(OBJ): $(HDR)
 
 check:
-	valgrind $(VALGRIND) ./example 2>&1
+	valgrind $(VALGRIND) ./test 2>&1
 
 clean:
-	rm -f example $(OBJ)
+	rm -f test $(OBJ)
 
 .PHONY: clean check
