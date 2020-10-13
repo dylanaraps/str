@@ -94,18 +94,20 @@ void str_zero(str **s) {
 }
 
 str *str_dup(str **s) {
-    str *n = str_init((*s)->len);
+    if ((*s)->err == STR_OK) {
+        str *n = str_init((*s)->len);
 
-    if (n) {
-        n->err = (*s)->err;
-        str_push_l(&n, (*s)->buf, (*s)->len);
+        if (n) {
+            str_push_l(&n, (*s)->buf, (*s)->len);
 
-        if (n->err == STR_OK) {
-            return n;
+            if (n->err == STR_OK) {
+                return n;
+            }
         }
+
+        str_free(n);
     }
 
-    str_free(n);
     return NULL;
 }
 
