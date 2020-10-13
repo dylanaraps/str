@@ -1,0 +1,33 @@
+name: CI
+on: [push, pull_request]
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                include:
+                    - arch: armv6
+                    - arch: armv7
+                    - arch: aarch64
+                    - arch: ppc64le
+                    - arch: s390x
+
+        steps:
+            - uses: actions/checkout@v1
+              uses: uraimo/run-on-arch-action@v2.0.5
+            - name: Run CI.
+              with:
+                  arch: ${{ matrix.arch }}
+                  distro: jessie
+
+                  install: |
+                      apt-get install valgrind tcc
+
+                  run: |
+                      CFLAGS=-Werror CC=gcc   make -B
+                      make check
+                      CFLAGS=-Werror CC=clang make -B
+                      make check
+                      CFLAGS=-Werror CC=tcc   make -B
+                      make check
