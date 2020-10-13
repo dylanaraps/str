@@ -13,6 +13,7 @@ typedef struct str {
 
 enum str_error {
     STR_OK,
+    STR_ERROR,
     STR_ENOMEM,
     STR_EINVAL
 };
@@ -27,6 +28,7 @@ void str_undo(str **s, const char *d);
 void str_zero(str **s);
 str *str_dup(str **s);
 void str_getline(str **s, FILE *f);
+void str_printf(str **s, const char *f, ...);
 void str_free(str *s);
 
 #endif

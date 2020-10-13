@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,7 +20,7 @@ str *str_init(size_t l) {
 }
 
 void str_alloc(str **s, size_t l) {
-    if ((*s)->err == STR_OK) {
+    if ((*s)->err == STR_OK && l != 0) {
         str *s2 = realloc(*s, sizeof (str) + (*s)->cap + l);
 
         if (s2) {
@@ -123,6 +124,29 @@ str *str_dup(str **s) {
     }
 
     return NULL;
+}
+
+void str_printf(str **s, const char *f, ...) {
+    va_list ap;
+    va_start(ap, f);
+
+    int l1 = vsnprintf(NULL, 0, f, ap);
+
+    if (l1 > 0) {
+        if (((*s)->len + (size_t) l1) >= (*s)->cap) {
+            str_alloc(s, (size_t) l1);
+        }
+
+        if (vsnprintf((*s)->buf + (*s)->len, (size_t) l1 + 1, f, ap) == l1) {
+            (*s)->len += (size_t) l1;
+            goto end;
+        }
+    }
+
+    (*s)->err = STR_ERROR;
+
+end:
+    va_end(ap);
 }
 
 void str_free(str *s) {

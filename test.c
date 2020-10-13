@@ -132,6 +132,11 @@ int main (int argc, char *argv[]) {
     str_getline(&s2, f);
     assert(s2->err == STR_EINVAL);
 
+    s2->err = STR_OK;
+    str_zero(&s2);
+    str_printf(&s2, "%d", 9876);
+    assert(strcmp(s2->buf, "9876") == 0);
+
     str_free(s2);
 
     return EXIT_SUCCESS;
