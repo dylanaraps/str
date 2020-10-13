@@ -2,5 +2,9 @@ str
 
 todo:
 
+- [ ] move back to struct
 - [ ] error handling
 - [ ] str_getline(str **, FILE *f);
+- [ ] str_tok
+- [ ] str_dup
+- [ ] etc
