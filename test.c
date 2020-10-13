@@ -135,6 +135,7 @@ int main (int argc, char *argv[]) {
     s2->err = STR_OK;
     str_zero(&s2);
     str_printf(&s2, "%d", 9876);
+    printf("%s\n", s2->buf);
     assert(strcmp(s2->buf, "9876") == 0);
 
     str_free(s2);
