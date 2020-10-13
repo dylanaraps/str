@@ -12,7 +12,6 @@ typedef struct str {
 
 enum str_error {
     STR_OK,
-    STR_ERROR,
     STR_ENOMEM,
     STR_EINVAL
 };
