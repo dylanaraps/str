@@ -28,6 +28,8 @@ int main (int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
+    printf("%s\n", s->buf);
+
     str_free(s);
     return EXIT_SUCCESS;
 }
