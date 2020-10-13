@@ -7,11 +7,8 @@
 
 typedef char str;
 
-#define str_get_cap(s) \
-    ((s) ? ((size_t *)(s))[-2] : (size_t) 0)
-
-#define str_get_len(s) \
-    ((s) ? ((size_t *)(s))[-1] : (size_t) 0)
+#define str_get_cap(s) ((s) ? ((size_t *)(s))[-2] : (size_t) 0)
+#define str_get_len(s) ((s) ? ((size_t *)(s))[-1] : (size_t) 0)
 
 #define str_init(s, l) str_alloc(s, l)
 
