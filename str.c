@@ -137,7 +137,10 @@ void str_printf(str **s, const char *f, ...) {
             str_alloc(s, (size_t) l1);
         }
 
-        if (vsnprintf((*s)->buf + (*s)->len, (size_t) l1 + 1, f, ap) == l1) {
+        int l2 = vsnprintf((*s)->buf + (*s)->len, (size_t) l1 + 1, f, ap);
+
+        printf("%zu/%zu\n", (size_t) l1, (size_t) l2);
+        if (l1 == l2) {
             (*s)->len += (size_t) l1;
             goto end;
         }
