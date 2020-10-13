@@ -25,6 +25,7 @@ void str_push(str **s, const char *d);
 void str_undo_l(str **s, size_t l);
 void str_undo(str **s, const char *d);
 void str_zero(str **s);
+str *str_dup(str **s);
 void str_free(str *s);
 
 #endif

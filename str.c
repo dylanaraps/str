@@ -98,6 +98,24 @@ void str_zero(str **s) {
     }
 }
 
+str *str_dup(str **s) {
+    str *n = str_init((*s)->len);
+
+    if (!n) {
+        return NULL;
+    }
+
+    n->err = (*s)->err;
+    str_push_l(&n, (*s)->buf, (*s)->len);
+
+    if (n->err != STR_OK) {
+        str_free(n);
+        return NULL;
+    }
+
+    return n;
+}
+
 void str_free(str *s) {
     if (s) {
         free(s);

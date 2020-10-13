@@ -4,5 +4,4 @@ todo:
 
 - [ ] str_getline(str **, FILE *f);
 - [ ] str_tok
-- [ ] str_dup
 - [ ] etc
