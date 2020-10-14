@@ -9,9 +9,10 @@ str *str_init(size_t l) {
     str *s = malloc(sizeof (str) + l + 1);
 
     if (s) {
-        s->cap = l + 1;
-        s->len = 0;
-        s->err = STR_OK;
+         s->cap = l + 1;
+         s->len = 0;
+         s->err = STR_OK;
+        *s->buf = 0;
     }
 
     return s;

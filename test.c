@@ -184,5 +184,19 @@ int main (int argc, char *argv[]) {
 
     str_free(s2);
 
+    s2 = str_init(0);
+        assert(s2);
+        assert(s2->cap == 1);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+
+    str_printf(&s2, "hello");
+        assert(s2->err == STR_OK);
+        assert(s2->cap == 6);
+        assert(s2->len == 5);
+        assert(strcmp(s2->buf, "hello") == 0);
+
+    str_free(s2);
+
     return EXIT_SUCCESS;
 }
