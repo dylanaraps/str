@@ -178,6 +178,14 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 0);
         assert(strcmp(s2->buf, "") == 0);
 
+    s2->err = STR_OK;
+
+    str_printf(&s2, "hello");
+        assert(s2->err == STR_OK);
+        assert(s2->cap == 39);
+        assert(s2->len == 5);
+        assert(strcmp(s2->buf, "hello") == 0);
+
     str_free(s2);
 
     return EXIT_SUCCESS;

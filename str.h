@@ -30,8 +30,8 @@ str *str_dup(str **s);
 void str_getline(str **s, FILE *f);
 void str_free(str *s);
 
-#define str_printf(s, f, ...) do { \
-    int l1 = snprintf(NULL, 0, f, __VA_ARGS__);       \
+#define str_printf(s, ...) do { \
+    int l1 = snprintf(NULL, 0, __VA_ARGS__);          \
                                                       \
     if (l1 > 0 && (*s)->err == STR_OK) {              \
         if (((*s)->len + (size_t) l1) >= (*s)->cap) { \
@@ -40,7 +40,7 @@ void str_free(str *s);
                                                       \
         if ((*s)->err == STR_OK) {                    \
             int l2 = snprintf((*s)->buf + (*s)->len,  \
-                (size_t) l1 + 1, f, __VA_ARGS__);     \
+                (size_t) l1 + 1, __VA_ARGS__);        \
                                                       \
             if (l1 == l2) {                           \
                 (*s)->len += (size_t) l1;             \
