@@ -150,21 +150,5 @@ int main (int argc, char *argv[]) {
 
     str_free(s2);
 
-    s2 = str_init(99999999999);
-        assert(!s2);
-
-    s2 = str_init(10);
-        assert(s2);
-        assert(s2->cap == 11);
-        assert(s2->len == 0);
-        assert(s2->err == STR_OK);
-
-    str_alloc(&s2, 99999999999);
-        assert(s2->cap == 11);
-        assert(s2->len == 0);
-        assert(s2->err == STR_ENOMEM);
-
-    str_free(s2);
-
     return EXIT_SUCCESS;
 }
