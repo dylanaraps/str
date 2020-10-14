@@ -204,6 +204,9 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 5);
         assert(strcmp(s2->buf, "hello") == 0);
 
+    str *s3 = str_dup(&s2);
+        assert(!s3);
+
     str_free(s2);
 
     return EXIT_SUCCESS;
