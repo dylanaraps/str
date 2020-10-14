@@ -136,7 +136,7 @@ void str_vprintf(str **s, const char *f, va_list ap) {
             va_list ap2;
             va_copy(ap2, ap);
             int l2 = vsnprintf((*s)->buf + (*s)->len,
-                (size_t) l1 + 1, f, ap);
+                (size_t) l1 + 1, f, ap2);
             va_end(ap2);
 
             if (l1 == l2) {
