@@ -1,4 +1,7 @@
 *.o
 *.s
+*.gcov
+*.gcda
+*.gcno
 .ccls-cache*
 test
