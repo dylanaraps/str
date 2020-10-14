@@ -33,7 +33,7 @@ void str_alloc(str **s, size_t l) {
 
 void str_push_c(str **s, char d) {
     if ((*s)->len + 1 >= (*s)->cap) {
-        str_alloc(s, (*s)->cap * 2);
+        str_alloc(s, (*s)->cap << 1);
     }
 
     if ((*s)->err == STR_OK) {
@@ -45,7 +45,7 @@ void str_push_c(str **s, char d) {
 void str_push_l(str **s, const char *d, size_t l) {
     if (d && d[0] && l > 0) {
         if (((*s)->len + l) >= (*s)->cap) {
-            str_alloc(s, l * 2);
+            str_alloc(s, l << 1);
         }
 
         if ((*s)->err == STR_OK) {
