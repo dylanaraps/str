@@ -11,11 +11,9 @@ str *str_init(size_t l) {
         s->cap = l + 1;
         s->len = 0;
         s->err = STR_OK;
-
-        return s;
     }
 
-    return NULL;
+    return s;
 }
 
 void str_alloc(str **s, size_t l) {

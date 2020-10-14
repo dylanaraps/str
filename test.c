@@ -131,11 +131,38 @@ int main (int argc, char *argv[]) {
     f = fopen("sdasldlasdjladjl", "r");
     str_getline(&s2, f);
     assert(s2->err == STR_EINVAL);
-
     s2->err = STR_OK;
+
     str_zero(&s2);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+        assert(s2->err == STR_OK);
+
     str_printf(&s2, "%d", 9876);
-    assert(strcmp(s2->buf, "9876") == 0);
+        assert(strcmp(s2->buf, "9876") == 0);
+
+    str_zero(&s2);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+        assert(s2->err == STR_OK);
+
+    str_free(s2);
+
+    s2 = str_init(99999999999);
+        assert(!s2);
+
+    s2 = str_init(10);
+        assert(s2);
+        assert(s2->cap == 11);
+        assert(s2->len == 0);
+        assert(s2->err == STR_OK);
+
+    str_alloc(&s2, 99999999999);
+        assert(s2->cap == 11);
+        assert(s2->len == 0);
+        assert(s2->err == STR_ENOMEM);
 
     str_free(s2);
 
