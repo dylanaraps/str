@@ -125,7 +125,12 @@ str *str_dup(str **s) {
 }
 
 void str_vprintf(str **s, const char *f, va_list ap) {
-    int l1 = vsnprintf(NULL, 0, f, ap);
+    va_list ap2;
+    va_copy(ap2, ap);
+
+    int l1 = vsnprintf(NULL, 0, f, ap2);
+
+    va_end(ap2);
 
     if (l1 > 0 && (*s)->err == STR_OK) {
         if (((*s)->len + (size_t) l1) >= (*s)->cap) {
@@ -133,11 +138,8 @@ void str_vprintf(str **s, const char *f, va_list ap) {
         }
 
         if ((*s)->err == STR_OK) {
-            va_list ap2;
-            va_copy(ap2, ap);
             int l2 = vsnprintf((*s)->buf + (*s)->len,
-                (size_t) l1 + 1, f, ap2);
-            va_end(ap2);
+                (size_t) l1 + 1, f, ap);
 
             if (l1 == l2) {
                 (*s)->len += (size_t) l1;
