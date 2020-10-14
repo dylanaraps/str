@@ -154,7 +154,7 @@ void str_vprintf(str **s, const char *f, va_list ap) {
 
 void str_printf(str **s, const char *f, ...) {
     va_list ap;
-	va_start(ap, f);
+    va_start(ap, f);
     str_vprintf(s, f, ap);
     va_end(ap);
 }
