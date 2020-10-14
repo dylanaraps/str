@@ -196,6 +196,14 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 5);
         assert(strcmp(s2->buf, "hello") == 0);
 
+    s2->err = STR_EINVAL;
+
+    str_printf(&s2, "%s", ", world");
+        assert(s2->err == STR_ERROR);
+        assert(s2->cap == 6);
+        assert(s2->len == 5);
+        assert(strcmp(s2->buf, "hello") == 0);
+
     str_free(s2);
 
     return EXIT_SUCCESS;
