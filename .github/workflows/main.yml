@@ -8,9 +8,9 @@ jobs:
             - name: Run CI.
               run: |
                   sudo apt install valgrind tcc
-                  export CFLAGS='-Werror -coverage -O0'
                   CC=tcc   make -B
                   make check
+                  export CFLAGS='-Werror -coverage -O0'
                   CC=clang make -B
                   make check
                   CC=gcc   make -B
