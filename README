@@ -5,3 +5,4 @@ todo:
 - [ ] str_tok
 - [ ] etc
 - [ ] test.c -> test/test-<purpose>.c
+- [ ] documentation
