@@ -61,12 +61,12 @@ int main (int argc, char *argv[]) {
     str_push(&s, long_str);
         assert(strcmp(s->buf, long_str) == 0);
         assert(s->len == 177);
-        assert(s->cap == 395);
+        assert(s->cap == 306);
         assert(s->err == STR_OK);
 
     str_zero(&s);
         assert(s->len == 0);
-        assert(s->cap == 395);
+        assert(s->cap == 306);
         assert(strcmp(s->buf, "") == 0);
         assert(s->err == STR_OK);
 
@@ -74,7 +74,7 @@ int main (int argc, char *argv[]) {
         str_push_c(&s, 'h');
             assert(strcmp(s->buf, "h") == 0);
             assert(s->len == 1);
-            assert(s->cap == 395);
+            assert(s->cap == 306);
             assert(s->err == STR_OK);
 
         str_push(&s, NULL);
@@ -85,14 +85,14 @@ int main (int argc, char *argv[]) {
             assert(s->err == STR_EINVAL);
             assert(strcmp(s->buf, "h") == 0);
             assert(s->len == 1);
-            assert(s->cap == 395);
+            assert(s->cap == 306);
 
         s->err = STR_OK;
     }
 
     str_push(&s, "ello, world");
         assert(s->len == 12);
-        assert(s->cap == 395);
+        assert(s->cap == 306);
         assert(strcmp(s->buf, "hello, world") == 0);
         assert(s->err == STR_OK);
 
@@ -109,17 +109,17 @@ int main (int argc, char *argv[]) {
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <assert.h>") == 0);
         assert(s2->len == 19);
-        assert(s2->cap == 39);
+        assert(s2->cap == 32);
         str_zero(&s2);
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <stdio.h>") == 0);
         assert(s2->len == 18);
-        assert(s2->cap == 39);
+        assert(s2->cap == 32);
         str_zero(&s2);
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <stdlib.h>") == 0);
         assert(s2->len == 19);
-        assert(s2->cap == 39);
+        assert(s2->cap == 32);
         fclose(f);
     }
 
@@ -129,8 +129,8 @@ int main (int argc, char *argv[]) {
     s2->err = STR_OK;
 
     str_zero(&s2);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
         assert(s2->err == STR_OK);
 
@@ -138,47 +138,47 @@ int main (int argc, char *argv[]) {
         assert(strcmp(s2->buf, "9876") == 0);
 
     str_zero(&s2);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
         assert(s2->err == STR_OK);
 
     str_push_l(&s2, "h", 0);
         assert(s2->err == STR_EINVAL);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
 
     s2->err = STR_OK;
 
     str_push_l(&s2, NULL, 10);
         assert(s2->err == STR_EINVAL);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
 
     s2->err = STR_OK;
 
     str_undo_l(&s2, 999);
         assert(s2->err == STR_EINVAL);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
 
     s2->err = STR_OK;
 
     str_undo(&s2, NULL);
         assert(s2->err == STR_EINVAL);
-        assert(s2->cap == 39);
         assert(s2->len == 0);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
 
     s2->err = STR_OK;
 
     str_printf(&s2, "hello");
         assert(s2->err == STR_OK);
-        assert(s2->cap == 39);
         assert(s2->len == 5);
+        assert(s2->cap == 32);
         assert(strcmp(s2->buf, "hello") == 0);
 
     str_free(s2);
