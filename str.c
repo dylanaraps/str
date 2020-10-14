@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -121,6 +122,38 @@ str *str_dup(str **s) {
     }
 
     return NULL;
+}
+
+void str_vprintf(str **s, const char *f, va_list ap) {
+    int l1 = vsnprintf(NULL, 0, f, ap);
+
+    if (l1 > 0 && (*s)->err == STR_OK) {
+        if (((*s)->len + (size_t) l1) >= (*s)->cap) {
+            str_alloc(s, (size_t) l1);
+        }
+
+        if ((*s)->err == STR_OK) {
+            va_list ap2;
+            va_copy(ap2, ap);
+            int l2 = vsnprintf((*s)->buf + (*s)->len,
+                (size_t) l1 + 1, f, ap);
+            va_end(ap2);
+
+            if (l1 == l2) {
+                (*s)->len += (size_t) l1;
+                return;
+            }
+        }
+    }
+
+    (*s)->err = STR_ERROR;
+}
+
+void str_printf(str **s, const char *f, ...) {
+    va_list ap;
+	va_start(ap, f);
+    str_vprintf(s, f, ap);
+    va_end(ap);
 }
 
 void str_free(str *s) {
