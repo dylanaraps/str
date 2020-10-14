@@ -13,11 +13,7 @@ int main (int argc, char *argv[]) {
     (void) argv;
 
     str *s = str_init(10);
-
-    if (!s) {
-        fputs("failed to allocate memory\n", stderr);
-        return EXIT_FAILURE;
-    }
+        assert(s);
         assert(s->cap == 11);
         assert(s->len == 0);
         assert(s->err == STR_OK);
