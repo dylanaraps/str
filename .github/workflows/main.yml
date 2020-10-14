@@ -12,8 +12,6 @@ jobs:
                   CC=tcc   make -B
                   make check
 
-                  export CFLAGS='-Werror -coverage -O0'
-
                   make clean
                   CC=clang make -B
                   make check
@@ -21,6 +19,8 @@ jobs:
                   make clean
                   CC=gcc   make -B
                   make check
+
+                  export CFLAGS='-Werror -coverage -O0'
 
                   make clean
                   CC=gcc   make -B
