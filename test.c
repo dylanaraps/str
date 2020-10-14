@@ -162,6 +162,22 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 0);
         assert(strcmp(s2->buf, "") == 0);
 
+    s2->err = STR_OK;
+
+    str_undo_l(&s2, 999);
+        assert(s2->err == STR_EINVAL);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+
+    s2->err = STR_OK;
+
+    str_undo(&s2, NULL);
+        assert(s2->err == STR_EINVAL);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+
     str_free(s2);
 
     return EXIT_SUCCESS;
