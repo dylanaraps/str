@@ -129,27 +129,25 @@ str *str_dup(str **s) {
 void str_printf(str **s, const char *f, ...) {
     va_list ap;
     va_start(ap, f);
-
     int l1 = vsnprintf(NULL, 0, f, ap);
+    va_end(ap);
 
     if (l1 > 0) {
         if (((*s)->len + (size_t) l1) >= (*s)->cap) {
             str_alloc(s, (size_t) l1);
         }
 
+        va_start(ap, f);
         int l2 = vsnprintf((*s)->buf + (*s)->len, (size_t) l1 + 1, f, ap);
+        va_end(ap);
 
-        printf("%zu/%zu\n", (size_t) l1, (size_t) l2);
         if (l1 == l2) {
             (*s)->len += (size_t) l1;
-            goto end;
+            return;
         }
     }
 
     (*s)->err = STR_ERROR;
-
-end:
-    va_end(ap);
 }
 
 void str_free(str *s) {
