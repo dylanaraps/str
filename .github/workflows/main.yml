@@ -9,11 +9,11 @@ jobs:
               run: |
                   sudo apt install valgrind tcc
                   export CFLAGS='-Werror -coverage -O0'
-                  CC=gcc   make -B
+                  CC=tcc   make -B
                   make check
                   CC=clang make -B
                   make check
-                  CC=tcc   make -B
+                  CC=gcc   make -B
                   make check
                   gcov test.c str.c
             - uses: codecov/codecov-action@v1
