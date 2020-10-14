@@ -130,7 +130,7 @@ int main (int argc, char *argv[]) {
 
     f = fopen("sdasldlasdjladjl", "r");
     str_getline(&s2, f);
-    assert(s2->err == STR_EINVAL);
+        assert(s2->err == STR_EINVAL);
     s2->err = STR_OK;
 
     str_zero(&s2);
@@ -147,6 +147,20 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 0);
         assert(strcmp(s2->buf, "") == 0);
         assert(s2->err == STR_OK);
+
+    str_push_l(&s2, "h", 0);
+        assert(s2->err == STR_EINVAL);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
+
+    s2->err = STR_OK;
+
+    str_push_l(&s2, NULL, 10);
+        assert(s2->err == STR_EINVAL);
+        assert(s2->cap == 39);
+        assert(s2->len == 0);
+        assert(strcmp(s2->buf, "") == 0);
 
     str_free(s2);
 
