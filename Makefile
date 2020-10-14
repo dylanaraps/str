@@ -36,6 +36,6 @@ check:
 	valgrind $(VALGRIND) ./test 2>&1
 
 clean:
-	rm -f test $(OBJ)
+	rm -f test $(OBJ) *.s *.gc
 
 .PHONY: clean check

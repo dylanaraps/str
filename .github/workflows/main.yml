@@ -8,13 +8,23 @@ jobs:
             - name: Run CI.
               run: |
                   sudo apt install valgrind tcc
+
                   CC=tcc   make -B
                   make check
+
                   export CFLAGS='-Werror -coverage -O0'
+
+                  make clean
                   CC=clang make -B
                   make check
+
+                  make clean
                   CC=gcc   make -B
                   make check
+
+                  make clean
+                  CC=gcc   make -B
+                  ./test
                   gcov str test
 
             - uses: codecov/codecov-action@v1
