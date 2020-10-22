@@ -25,10 +25,10 @@ OBJ = test.o str.o
 HDR = str.h
 
 test: $(OBJ)
-	$(CC) $(BUILD_FLAGS) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+	$(CC) $(BUILD_FLAGS) $(CFLAGS) -O0 -g -o $@ $(OBJ) $(LDFLAGS)
 
 .c.o:
-	$(CC) $(BUILD_FLAGS) $(CFLAGS) -c -o $@ $<
+	$(CC) $(BUILD_FLAGS) $(CFLAGS) -O0 -g -c -o $@ $<
 
 $(OBJ): $(HDR)
 

@@ -1,7 +1,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "str.h"
 
@@ -31,36 +30,41 @@ void str_alloc(str **s, size_t l) {
     }
 }
 
-void str_push_c(str **s, char d) {
+void str_push_c(str **s, int c) {
     if ((*s)->len + 1 >= (*s)->cap) {
         str_alloc(s, ((*s)->cap + ((*s)->cap >> 1)));
     }
 
     if ((*s)->err == STR_OK) {
-        (*s)->buf[(*s)->len] = d;
+        (*s)->buf[(*s)->len] = c;
         (*s)->buf[(*s)->len += 1] = 0;
     }
 }
 
 void str_push_l(str **s, const char *d, size_t l) {
-    if (d && d[0] && l > 0) {
+    if (d && l > 0) {
         if (((*s)->len + l) >= (*s)->cap) {
             str_alloc(s, (l + (l >> 1)));
         }
 
         if ((*s)->err == STR_OK) {
-            memcpy((*s)->buf + (*s)->len, d, l);
-            (*s)->buf[(*s)->len += l] = 0;
+            for (size_t i = 0; i < l; i++) {
+                str_push_c(s, d[i]);
+            }
         }
     } else {
         (*s)->err = STR_EINVAL;
     }
 }
 
-void str_push(str **s, const char *d) {
-    if (d && d[0]) {
+void str_push_s(str **s, const char *d) {
+    if (d) {
         if ((*s)->err == STR_OK) {
-            str_push_l(s, d, strlen(d));
+            size_t l = 0;
+
+            while (d[l]) l++;
+
+            str_push_l(s, d, l);
         }
     } else {
         (*s)->err = STR_EINVAL;
@@ -77,20 +81,17 @@ void str_undo_l(str **s, size_t l) {
     }
 }
 
-void str_undo(str **s, const char *d) {
-    if (d && d[0]) {
+void str_undo_s(str **s, const char *d) {
+    if (d) {
         if ((*s)->err == STR_OK) {
-            str_undo_l(s, strlen(d));
+            size_t l = 0;
+
+            while (d[l]) l++;
+
+            str_undo_l(s, l);
         }
     } else {
         (*s)->err = STR_EINVAL;
-    }
-}
-
-void str_zero(str **s) {
-    if ((*s)->err == STR_OK) {
-        memset((*s)->buf, 0, (*s)->len);
-        (*s)->len = 0;
     }
 }
 
@@ -100,6 +101,10 @@ void str_getline(str **s, FILE *f) {
 
         while ((c = fgetc(f)) != '\n' && c != EOF) {
             str_push_c(s, c);
+        }
+
+        if ((*s)->err == STR_OK) {
+            (*s)->err = c == EOF ? STR_EOF : (*s)->err;
         }
 
     } else {
@@ -122,45 +127,26 @@ str *str_dup(str **s) {
         str_free(n);
     }
 
-    return NULL;
+    return 0;
 }
 
-void str_vprintf(str **s, const char *f, va_list ap) {
-    va_list ap2;
-    va_copy(ap2, ap);
+size_t str_rchr(str *s, int c) {
+    size_t l = s->len;
 
-    int l1 = vsnprintf(NULL, 0, f, ap2);
+    while (l && s->buf[l] != c) l--;
 
-    va_end(ap2);
-
-    if (l1 > 0 && (*s)->err == STR_OK) {
-        if (((*s)->len + (size_t) l1) >= (*s)->cap) {
-            str_alloc(s, (size_t) l1);
-        }
-
-        if ((*s)->err == STR_OK) {
-            int l2 = vsnprintf((*s)->buf + (*s)->len,
-                (size_t) l1 + 1, f, ap);
-
-            if (l1 == l2) {
-                (*s)->len += (size_t) l1;
-                return;
-            }
-        }
-    }
-
-    (*s)->err = STR_ERROR;
+    return l;
 }
 
-void str_printf(str **s, const char *f, ...) {
-    va_list ap;
-    va_start(ap, f);
-    str_vprintf(s, f, ap);
-    va_end(ap);
+void str_path_normalize(str **s) {
+    for (; (*s)->buf[(*s)->len - 1] == '/';
+           (*s)->buf[--(*s)->len] = 0);
 }
 
-void str_free(str *s) {
-    if (s) {
-        free(s);
+void str_free(str **s) {
+    if (*s) {
+        free(*s);
+        *s = NULL;
     }
 }
+

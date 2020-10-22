@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
         assert(s->len == 0);
         assert(s->err == STR_OK);
 
-    str_push(&s, "hello, ");
+    str_push_s(&s, "hello, ");
         assert(strcmp(s->buf, "hello, ") == 0);
         assert(s->cap == 41);
         assert(s->len == 7);
@@ -34,7 +34,7 @@ int main (int argc, char *argv[]) {
         assert(s->len == 12);
         assert(s->err == STR_OK);
 
-    str_undo(&s, "world");
+    str_undo_s(&s, "world");
         assert(s->cap == 41);
         assert(strcmp(s->buf, "hello, ") == 0);
         assert(s->len == 7);
@@ -52,19 +52,19 @@ int main (int argc, char *argv[]) {
         assert(s->len == 6);
         assert(s->err == STR_OK);
 
-    str_zero(&s);
+    str_undo_l(&s, s->len);
         assert(s->cap == 41);
         assert(s->len == 0);
         assert(strcmp(s->buf, "") == 0);
         assert(s->err == STR_OK);
 
-    str_push(&s, long_str);
+    str_push_s(&s, long_str);
         assert(strcmp(s->buf, long_str) == 0);
         assert(s->len == 177);
         assert(s->cap == 306);
         assert(s->err == STR_OK);
 
-    str_zero(&s);
+    str_undo_l(&s, s->len);
         assert(s->len == 0);
         assert(s->cap == 306);
         assert(strcmp(s->buf, "") == 0);
@@ -77,7 +77,7 @@ int main (int argc, char *argv[]) {
             assert(s->cap == 306);
             assert(s->err == STR_OK);
 
-        str_push(&s, NULL);
+        str_push_s(&s, NULL);
             assert(s->err == STR_EINVAL);
 
         str_push_l(&s, "ello", 4);
@@ -90,14 +90,14 @@ int main (int argc, char *argv[]) {
         s->err = STR_OK;
     }
 
-    str_push(&s, "ello, world");
+    str_push_s(&s, "ello, world");
         assert(s->len == 12);
         assert(s->cap == 306);
         assert(strcmp(s->buf, "hello, world") == 0);
         assert(s->err == STR_OK);
 
     str *s2 = str_dup(&s);
-    str_free(s);
+    str_free(&s);
         assert(s2->len == 12);
         assert(s2->cap == 13);
         assert(strcmp(s2->buf, "hello, world") == 0);
@@ -105,17 +105,17 @@ int main (int argc, char *argv[]) {
 
     FILE *f = fopen("./test.c", "r");
     if (f) {
-        str_zero(&s2);
+        str_undo_l(&s2, s2->len);
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <assert.h>") == 0);
         assert(s2->len == 19);
         assert(s2->cap == 32);
-        str_zero(&s2);
+        str_undo_l(&s2, s2->len);
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <stdio.h>") == 0);
         assert(s2->len == 18);
         assert(s2->cap == 32);
-        str_zero(&s2);
+        str_undo_l(&s2, s2->len);
         str_getline(&s2, f);
         assert(strcmp(s2->buf, "#include <stdlib.h>") == 0);
         assert(s2->len == 19);
@@ -128,16 +128,13 @@ int main (int argc, char *argv[]) {
         assert(s2->err == STR_EINVAL);
     s2->err = STR_OK;
 
-    str_zero(&s2);
+    str_undo_l(&s2, s2->len);
         assert(s2->len == 0);
         assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
         assert(s2->err == STR_OK);
 
-    str_printf(&s2, "%d", 9876);
-        assert(strcmp(s2->buf, "9876") == 0);
-
-    str_zero(&s2);
+    str_undo_l(&s2, s2->len);
         assert(s2->len == 0);
         assert(s2->cap == 32);
         assert(strcmp(s2->buf, "") == 0);
@@ -167,7 +164,7 @@ int main (int argc, char *argv[]) {
 
     s2->err = STR_OK;
 
-    str_undo(&s2, NULL);
+    str_undo_s(&s2, NULL);
         assert(s2->err == STR_EINVAL);
         assert(s2->len == 0);
         assert(s2->cap == 32);
@@ -175,13 +172,7 @@ int main (int argc, char *argv[]) {
 
     s2->err = STR_OK;
 
-    str_printf(&s2, "hello");
-        assert(s2->err == STR_OK);
-        assert(s2->len == 5);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "hello") == 0);
-
-    str_free(s2);
+    str_free(&s2);
 
     s2 = str_init(0);
         assert(s2);
@@ -189,24 +180,8 @@ int main (int argc, char *argv[]) {
         assert(s2->len == 0);
         assert(strcmp(s2->buf, "") == 0);
 
-    str_printf(&s2, "hello");
-        assert(s2->err == STR_OK);
-        assert(s2->cap == 6);
-        assert(s2->len == 5);
-        assert(strcmp(s2->buf, "hello") == 0);
-
-    s2->err = STR_EINVAL;
-
-    str_printf(&s2, "%s", ", world");
-        assert(s2->err == STR_ERROR);
-        assert(s2->cap == 6);
-        assert(s2->len == 5);
-        assert(strcmp(s2->buf, "hello") == 0);
-
-    str *s3 = str_dup(&s2);
-        assert(!s3);
-
-    str_free(s2);
+    str_free(&s2);
 
     return EXIT_SUCCESS;
 }
+
