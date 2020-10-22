@@ -124,7 +124,7 @@ str *str_dup(str **s) {
             }
         }
 
-        str_free(n);
+        str_free(&n);
     }
 
     return 0;
