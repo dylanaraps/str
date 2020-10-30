@@ -1,36 +1,28 @@
-#ifndef KISS_STR_H_
-#define KISS_STR_H_
+#ifndef KISS_STR_H
+#define KISS_STR_H
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct str {
-    size_t len;
-    size_t cap;
-    size_t err;
-    char buf[];
-} str;
+typedef char str;
 
-enum str_error {
-    STR_OK,
-    STR_ERROR,
-    STR_ENOMEM,
-    STR_EINVAL,
-    STR_EOF,
-};
+size_t str_get_cap(str **s);
+size_t str_get_len(str **s);
+void str_set_cap(str **s, size_t l);
+void str_set_len(str **s, size_t l);
 
 str *str_init(size_t l);
-void str_alloc(str **s, size_t l);
-void str_push_c(str **s, int c);
-void str_push_l(str **s, const char *d, size_t l);
-void str_push_s(str **s, const char *d);
-void str_undo_l(str **s, size_t l);
-void str_undo_s(str **s, const char *d);
-str *str_dup(str **s);
-void str_getline(str **s, FILE *f);
-void str_path_normalize(str **s);
-size_t str_rchr(str *s, int c);
+str *str_alloc(str **s, size_t l);
+int str_maybe_alloc(str **s, size_t l);
+int str_push_l(str **s, const char *d, size_t l);
+int str_push_s(str **s, const char *d);
+int str_push_c(str **s, int d, size_t n);
+int str_undo_l(str **s, size_t l);
+int str_undo_s(str **s, const char *d);
+void str_undo_c(str **s, int d);
+int str_vprintf(str **s, const char *f, va_list ap);
+int str_printf(str **s, const char *f, ...);
 void str_free(str **s);
 
 #endif

@@ -11,176 +11,80 @@ int main (int argc, char *argv[]) {
     (void) argc;
     (void) argv;
 
+    int err = 0;
+
     str *s = str_init(10);
+        assert(str_get_cap(&s) == 11);
+        assert(str_get_len(&s) == 0);
         assert(s);
-        assert(s->cap == 11);
-        assert(s->len == 0);
-        assert(s->err == STR_OK);
 
-    str_alloc(&s, 30);
-        assert(s->cap == 41);
-        assert(s->len == 0);
-        assert(s->err == STR_OK);
+    err = str_push_s(&s, "hello, ");
+        assert(str_get_cap(&s) == 11);
+        assert(str_get_len(&s) == 7);
+        assert(strcmp(s, "hello, ") == 0);
+        assert(err == 0);
 
-    str_push_s(&s, "hello, ");
-        assert(strcmp(s->buf, "hello, ") == 0);
-        assert(s->cap == 41);
-        assert(s->len == 7);
-        assert(s->err == STR_OK);
+    err = str_push_l(&s, "world", 5);
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 12);
+        assert(strcmp(s, "hello, world") == 0);
+        assert(err == 0);
 
-    str_push_l(&s, "world", 5);
-        assert(s->cap == 41);
-        assert(strcmp(s->buf, "hello, world") == 0);
-        assert(s->len == 12);
-        assert(s->err == STR_OK);
+    err = str_undo_s(&s, "world");
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 7);
+        assert(strcmp(s, "hello, ") == 0);
+        assert(err == 0);
 
-    str_undo_s(&s, "world");
-        assert(s->cap == 41);
-        assert(strcmp(s->buf, "hello, ") == 0);
-        assert(s->len == 7);
-        assert(s->err == STR_OK);
+    err = str_undo_l(&s, 2);
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 5);
+        assert(strcmp(s, "hello") == 0);
+        assert(err == 0);
 
-    str_undo_l(&s, 2);
-        assert(s->cap == 41);
-        assert(strcmp(s->buf, "hello") == 0);
-        assert(s->len == 5);
-        assert(s->err == STR_OK);
+    err = str_push_c(&s, '!', 10);
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 15);
+        assert(strcmp(s, "hello!!!!!!!!!!") == 0);
+        assert(err == 0);
 
-    str_push_c(&s, '!');
-        assert(s->cap == 41);
-        assert(strcmp(s->buf, "hello!") == 0);
-        assert(s->len == 6);
-        assert(s->err == STR_OK);
+    str_undo_c(&s, '!');
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 5);
+        assert(strcmp(s, "hello") == 0);
 
-    str_undo_l(&s, s->len);
-        assert(s->cap == 41);
-        assert(s->len == 0);
-        assert(strcmp(s->buf, "") == 0);
-        assert(s->err == STR_OK);
+    err = str_undo_l(&s, str_get_len(&s));
+        assert(str_get_cap(&s) == 19);
+        assert(str_get_len(&s) == 0);
+        assert(strcmp(s, "") == 0);
+        assert(err == 0);
 
-    str_push_s(&s, long_str);
-        assert(strcmp(s->buf, long_str) == 0);
-        assert(s->len == 177);
-        assert(s->cap == 306);
-        assert(s->err == STR_OK);
+    err = str_push_s(&s, long_str);
+        assert(str_get_cap(&s) == 285);
+        assert(str_get_len(&s) == 177);
+        assert(strcmp(s, long_str) == 0);
+        assert(err == 0);
 
-    str_undo_l(&s, s->len);
-        assert(s->len == 0);
-        assert(s->cap == 306);
-        assert(strcmp(s->buf, "") == 0);
-        assert(s->err == STR_OK);
+    err = str_undo_l(&s, str_get_len(&s));
+        assert(str_get_cap(&s) == 285);
+        assert(str_get_len(&s) == 0);
+        assert(strcmp(s, "") == 0);
+        assert(err == 0);
 
-    {
-        str_push_c(&s, 'h');
-            assert(strcmp(s->buf, "h") == 0);
-            assert(s->len == 1);
-            assert(s->cap == 306);
-            assert(s->err == STR_OK);
+    err = str_push_s(&s, "ello, world");
+        assert(str_get_cap(&s) == 285);
+        assert(str_get_len(&s) == 11);
+        assert(strcmp(s, "ello, world") == 0);
+        assert(err == 0);
 
-        str_push_s(&s, NULL);
-            assert(s->err == STR_EINVAL);
+    err = str_printf(&s, " %d", 12345);
+        assert(str_get_cap(&s) == 285);
+        assert(str_get_len(&s) == 17);
+        assert(strcmp(s, "ello, world 12345") == 0);
+        assert(err == 0);
 
-        str_push_l(&s, "ello", 4);
-        str_push_l(&s, "worl", 4);
-            assert(s->err == STR_EINVAL);
-            assert(strcmp(s->buf, "h") == 0);
-            assert(s->len == 1);
-            assert(s->cap == 306);
-
-        s->err = STR_OK;
-    }
-
-    str_push_s(&s, "ello, world");
-        assert(s->len == 12);
-        assert(s->cap == 306);
-        assert(strcmp(s->buf, "hello, world") == 0);
-        assert(s->err == STR_OK);
-
-    str *s2 = str_dup(&s);
     str_free(&s);
-        assert(s2->len == 12);
-        assert(s2->cap == 13);
-        assert(strcmp(s2->buf, "hello, world") == 0);
-        assert(s2->err == STR_OK);
-
-    FILE *f = fopen("./test.c", "r");
-    if (f) {
-        str_undo_l(&s2, s2->len);
-        str_getline(&s2, f);
-        assert(strcmp(s2->buf, "#include <assert.h>") == 0);
-        assert(s2->len == 19);
-        assert(s2->cap == 32);
-        str_undo_l(&s2, s2->len);
-        str_getline(&s2, f);
-        assert(strcmp(s2->buf, "#include <stdio.h>") == 0);
-        assert(s2->len == 18);
-        assert(s2->cap == 32);
-        str_undo_l(&s2, s2->len);
-        str_getline(&s2, f);
-        assert(strcmp(s2->buf, "#include <stdlib.h>") == 0);
-        assert(s2->len == 19);
-        assert(s2->cap == 32);
-        fclose(f);
-    }
-
-    f = fopen("sdasldlasdjladjl", "r");
-    str_getline(&s2, f);
-        assert(s2->err == STR_EINVAL);
-    s2->err = STR_OK;
-
-    str_undo_l(&s2, s2->len);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-        assert(s2->err == STR_OK);
-
-    str_undo_l(&s2, s2->len);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-        assert(s2->err == STR_OK);
-
-    str_push_l(&s2, "h", 0);
-        assert(s2->err == STR_EINVAL);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-
-    s2->err = STR_OK;
-
-    str_push_l(&s2, NULL, 10);
-        assert(s2->err == STR_EINVAL);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-
-    s2->err = STR_OK;
-
-    str_undo_l(&s2, 999);
-        assert(s2->err == STR_EINVAL);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-
-    s2->err = STR_OK;
-
-    str_undo_s(&s2, NULL);
-        assert(s2->err == STR_EINVAL);
-        assert(s2->len == 0);
-        assert(s2->cap == 32);
-        assert(strcmp(s2->buf, "") == 0);
-
-    s2->err = STR_OK;
-
-    str_free(&s2);
-
-    s2 = str_init(0);
-        assert(s2);
-        assert(s2->cap == 1);
-        assert(s2->len == 0);
-        assert(strcmp(s2->buf, "") == 0);
-
-    str_free(&s2);
+        assert(!s);
 
     return EXIT_SUCCESS;
 }
