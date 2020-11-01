@@ -30,34 +30,20 @@ int main (int argc, char *argv[]) {
         assert(strcmp(s, "hello, world") == 0);
         assert(err == 0);
 
-    err = str_undo_s(&s, "world");
+    str_set_len(&s, str_get_len(&s) - 5);
         assert(str_get_cap(&s) == 19);
         assert(str_get_len(&s) == 7);
         assert(strcmp(s, "hello, ") == 0);
-        assert(err == 0);
 
-    err = str_undo_l(&s, 2);
-        assert(str_get_cap(&s) == 19);
-        assert(str_get_len(&s) == 5);
-        assert(strcmp(s, "hello") == 0);
-        assert(err == 0);
-
-    err = str_push_c(&s, '!', 10);
-        assert(str_get_cap(&s) == 19);
-        assert(str_get_len(&s) == 15);
-        assert(strcmp(s, "hello!!!!!!!!!!") == 0);
-        assert(err == 0);
-
-    str_undo_c(&s, '!');
+    str_set_len(&s, str_get_len(&s) - 2);
         assert(str_get_cap(&s) == 19);
         assert(str_get_len(&s) == 5);
         assert(strcmp(s, "hello") == 0);
 
-    err = str_undo_l(&s, str_get_len(&s));
+    str_set_len(&s, 0);
         assert(str_get_cap(&s) == 19);
         assert(str_get_len(&s) == 0);
         assert(strcmp(s, "") == 0);
-        assert(err == 0);
 
     err = str_push_s(&s, long_str);
         assert(str_get_cap(&s) == 285);
@@ -65,11 +51,10 @@ int main (int argc, char *argv[]) {
         assert(strcmp(s, long_str) == 0);
         assert(err == 0);
 
-    err = str_undo_l(&s, str_get_len(&s));
+    str_set_len(&s, 0);
         assert(str_get_cap(&s) == 285);
         assert(str_get_len(&s) == 0);
         assert(strcmp(s, "") == 0);
-        assert(err == 0);
 
     err = str_push_s(&s, "ello, world");
         assert(str_get_cap(&s) == 285);
